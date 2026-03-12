@@ -2,22 +2,15 @@ import React, { useEffect, useRef } from "react";
 import { ZegoUIKitPrebuilt } from "@zegocloud/zego-uikit-prebuilt";
 
 function App() {
-
   const containerRef = useRef(null);
 
   useEffect(() => {
-
-    // Function to get roomID from URL
-    function getUrlParams(url) {
-      const urlStr = url.split('?')[1] || "";
-      const urlSearchParams = new URLSearchParams(urlStr);
-      return Object.fromEntries(urlSearchParams.entries());
-    }
-
-    const params = getUrlParams(window.location.href);
-    const roomID = params['roomID'] || (Math.floor(Math.random() * 10000) + "");
+    // Fixed room ID - 147
+    const roomID = "147";
+    
+    // Generate random user ID and name
     const userID = Math.floor(Math.random() * 10000) + "";
-    const userName = "userName" + userID;
+    const userName = "User_" + userID;
 
     const appID = 1959727034;
     const serverSecret = "a8107994bc88a43108a0987e759357ac";
@@ -36,7 +29,7 @@ function App() {
     zp.joinRoom({
       container: containerRef.current,
       sharedLinks: [{
-        name: 'Personal link',
+        name: 'Join Room 147',
         url: window.location.protocol + '//' + window.location.host + window.location.pathname + '?roomID=' + roomID,
       }],
       scenario: {
@@ -55,10 +48,19 @@ function App() {
       showLayoutButton: false,
     });
 
+    // Optional: Log the room ID for debugging
+    console.log("Joining room:", roomID);
+
   }, []);
 
   return (
-    <div style={{ width: "100vw", height: "100vh" }} ref={containerRef}></div>
+    <div style={{ 
+      width: "100vw", 
+      height: "100vh",
+      position: "fixed",
+      top: 0,
+      left: 0
+    }} ref={containerRef}></div>
   );
 }
 

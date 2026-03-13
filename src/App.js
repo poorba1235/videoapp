@@ -6,7 +6,7 @@ function App() {
 
   useEffect(() => {
     // Fixed room ID - 147
-    const roomID = "147";
+    const roomID = "604";
     
     // Generate random user ID and name
     const userID = Math.floor(Math.random() * 10000) + "";
@@ -43,7 +43,7 @@ function App() {
       showScreenSharingButton: true,
       showTextChat: true,
       showUserList: true,
-      maxUsers: 4,
+      maxUsers: 50,
       layout: "Auto",
       showLayoutButton: false,
     });

@@ -3,10 +3,14 @@ import { ZegoUIKitPrebuilt } from "@zegocloud/zego-uikit-prebuilt";
 
 function App() {
   const containerRef = useRef(null);
+  const hasJoinedRef = useRef(false);
 
   useEffect(() => {
+    if (hasJoinedRef.current) return; // prevent double join
+    hasJoinedRef.current = true;
+
     const roomID = "604";
-    const userID = Math.floor(Math.random() * 10000) + "";
+    const userID = Date.now().toString();
     const userName = "User_" + userID;
 
     const appID = 1959727034;
@@ -22,53 +26,39 @@ function App() {
 
     const zp = ZegoUIKitPrebuilt.create(kitToken);
 
-    // Ensure container is ready
-    if (containerRef.current) {
-      zp.joinRoom({
-        container: containerRef.current,
-        sharedLinks: [
-          {
-            name: "Join Room 604",
-            url:
-              window.location.protocol +
-              "//" +
-              window.location.host +
-              window.location.pathname +
-              "?roomID=" +
-              roomID,
-          },
-        ],
-        scenario: {
-          mode: ZegoUIKitPrebuilt.VideoConference,
-        },
-        turnOnMicrophoneWhenJoining: true,
-        turnOnCameraWhenJoining: true,
-        showMyCameraToggleButton: true,
-        showMyMicrophoneToggleButton: true,
-        showAudioVideoSettingsButton: true,
-        showScreenSharingButton: true,
-        showTextChat: true,
-        showUserList: true,
-        maxUsers: 50,
-        layout: "Sidebar", // Use Sidebar for stable layout
-        showLayoutButton: true, // Let users switch layout if needed
-      });
-    }
+    zp.joinRoom({
+      container: containerRef.current,
 
-    console.log("Joining room:", roomID);
+      scenario: {
+        mode: ZegoUIKitPrebuilt.VideoConference,
+      },
+
+      turnOnCameraWhenJoining: true,
+      turnOnMicrophoneWhenJoining: true,
+
+      showMyCameraToggleButton: true,
+      showMyMicrophoneToggleButton: true,
+      showAudioVideoSettingsButton: true,
+
+      showScreenSharingButton: true,
+      showTextChat: true,
+      showUserList: true,
+
+      maxUsers: 50,
+
+      layout: "Grid",   // better for multiple users
+      showLayoutButton: true,
+    });
   }, []);
 
   return (
     <div
+      ref={containerRef}
       style={{
         width: "100vw",
         height: "100vh",
-        position: "fixed",
-        top: 0,
-        left: 0,
       }}
-      ref={containerRef}
-    ></div>
+    />
   );
 }
 

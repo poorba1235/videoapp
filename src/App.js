@@ -5,7 +5,7 @@ function App() {
   const containerRef = useRef(null);
 
   useEffect(() => {
-    // Fixed room ID - 147
+  
     const roomID = "604";
     
     // Generate random user ID and name
@@ -29,7 +29,7 @@ function App() {
     zp.joinRoom({
       container: containerRef.current,
       sharedLinks: [{
-        name: 'Join Room 147',
+        name: 'Join Room 604',
         url: window.location.protocol + '//' + window.location.host + window.location.pathname + '?roomID=' + roomID,
       }],
       scenario: {

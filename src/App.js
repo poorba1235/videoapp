@@ -3,19 +3,28 @@ import { ZegoUIKitPrebuilt } from "@zegocloud/zego-uikit-prebuilt";
 
 function App() {
   const containerRef = useRef(null);
-  const hasJoinedRef = useRef(false);
 
   useEffect(() => {
-    if (hasJoinedRef.current) return; // prevent double join
-    hasJoinedRef.current = true;
+    
+    function getUrlParams(url) {
+      let urlStr = url.split("?")[1];
+      const urlSearchParams = new URLSearchParams(urlStr);
+      return Object.fromEntries(urlSearchParams.entries());
+    }
 
-    const roomID = "604";
-    const userID = Date.now().toString();
-    const userName = "User_" + userID;
+    // Get roomID from URL or create random
+    const roomID =
+      getUrlParams(window.location.href)["roomID"] ||
+      Math.floor(Math.random() * 10000).toString();
+
+    // Generate random user
+    const userID = Math.floor(Math.random() * 10000).toString();
+    const userName = "userName" + userID;
 
     const appID = 1959727034;
     const serverSecret = "a8107994bc88a43108a0987e759357ac";
 
+    // Generate token
     const kitToken = ZegoUIKitPrebuilt.generateKitTokenForTest(
       appID,
       serverSecret,
@@ -29,12 +38,25 @@ function App() {
     zp.joinRoom({
       container: containerRef.current,
 
+      sharedLinks: [
+        {
+          name: "Personal link",
+          url:
+            window.location.protocol +
+            "//" +
+            window.location.host +
+            window.location.pathname +
+            "?roomID=" +
+            roomID,
+        },
+      ],
+
       scenario: {
         mode: ZegoUIKitPrebuilt.VideoConference,
       },
 
-      turnOnCameraWhenJoining: true,
       turnOnMicrophoneWhenJoining: true,
+      turnOnCameraWhenJoining: true,
 
       showMyCameraToggleButton: true,
       showMyMicrophoneToggleButton: true,
@@ -45,8 +67,7 @@ function App() {
       showUserList: true,
 
       maxUsers: 50,
-
-      layout: "Grid",   // better for multiple users
+      layout: "Sidebar",
       showLayoutButton: true,
     });
   }, []);
@@ -58,7 +79,7 @@ function App() {
         width: "100vw",
         height: "100vh",
       }}
-    />
+    ></div>
   );
 }
 

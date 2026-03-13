@@ -43,7 +43,7 @@ function App() {
       showScreenSharingButton: true,
       showTextChat: true,
       showUserList: true,
-      maxUsers: 2,
+      maxUsers: 4,
       layout: "Auto",
       showLayoutButton: false,
     });
